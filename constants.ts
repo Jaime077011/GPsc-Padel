@@ -1,5 +1,4 @@
-
-import { Team, Match } from './types';
+import { Team, Match } from './types.ts';
 
 /*
   ===================================================================

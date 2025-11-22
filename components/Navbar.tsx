@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { TabView } from '../types';
+import { TabView } from '../types.ts';
 
 interface NavbarProps {
   currentTab: TabView;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Match, Team, MatchStatus } from '../types';
+import { Match, Team, MatchStatus } from '../types.ts';
 
 interface MatchCardProps {
   match: Match;

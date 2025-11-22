@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import MatchCard from './MatchCard';
-import { Match, Team } from '../types';
+import MatchCard from './MatchCard.tsx';
+import { Match, Team } from '../types.ts';
 
 interface ScheduleViewProps {
   matches: Match[];

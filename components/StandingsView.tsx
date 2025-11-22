@@ -1,5 +1,5 @@
 import React from 'react';
-import { Team, Match } from '../types';
+import { Team, Match } from '../types.ts';
 
 interface StandingsViewProps {
   teams: Team[];

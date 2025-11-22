@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Navbar from './components/Navbar';
-import ScheduleView from './components/ScheduleView';
-import StandingsView from './components/StandingsView';
-import { MATCHES, TEAMS } from './constants';
-import { TabView } from './types';
+import Navbar from './components/Navbar.tsx';
+import ScheduleView from './components/ScheduleView.tsx';
+import StandingsView from './components/StandingsView.tsx';
+import { MATCHES, TEAMS } from './constants.ts';
+import { TabView } from './types.ts';
 
 const App: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<TabView>('SCHEDULE');
