@@ -22,7 +22,6 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-slate-800 mt-auto py-8 text-center text-slate-500 text-sm">
         <p>© {new Date().getFullYear()} Ragab Padel Tournament.</p>
       </footer>

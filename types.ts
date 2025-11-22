@@ -2,7 +2,7 @@
 export interface Player {
   id: string;
   name: string;
-  role?: string; // e.g., "Main", "Sub"
+  role?: string;
 }
 
 export interface Team {
@@ -29,7 +29,7 @@ export interface Match {
   status: MatchStatus;
   scores: SetScore[];
   winnerId?: string;
-  round: string; // e.g., "Group Stage", "Quarter Final"
+  round: string;
 }
 
 export type TabView = 'SCHEDULE' | 'STANDINGS';
