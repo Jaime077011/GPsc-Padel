@@ -1,21 +1,26 @@
-import { Team, Match } from './types.ts';
-
 /*
   ===================================================================
   🏆 MANUAL DATABASE
   ===================================================================
   
   HOW TO UPDATE YOUR SITE:
-  1. Edit the TEAMS list to change team names/players.
-  2. Edit the MATCHES list to add games or update scores.
-  3. Commit and push your code to GitHub to publish changes.
+  1. Edit the list below.
+  2. The site will automatically read these values.
   
-  -------------------------------------------------------------------
-  TEAMS CONFIGURATION
-  -------------------------------------------------------------------
+  NOTE: Do not remove the 'window.TEAMS =' part.
 */
 
-export const TEAMS: Team[] = [
+// Helper to set dates (Year-Month-Day, Hour:Minute)
+const setTime = (dateStr, timeStr) => {
+  return new Date(`${dateStr}T${timeStr}:00`).toISOString();
+};
+
+/* 
+  -------------------------------------------------------------------
+  1. TEAMS
+  -------------------------------------------------------------------
+*/
+window.TEAMS = [
   {
     id: 't1',
     name: 'The Smasher Bros',
@@ -56,31 +61,11 @@ export const TEAMS: Team[] = [
 
 /*
   -------------------------------------------------------------------
-  MATCH SCHEDULE & SCORES
+  2. MATCH SCHEDULE & SCORES
   -------------------------------------------------------------------
-  
   Status Options: 'SCHEDULED' | 'LIVE' | 'FINISHED'
-  
-  Example of a finished game:
-  {
-    id: 'm1',
-    team1Id: 't1',
-    team2Id: 't2',
-    startTime: setTime('2024-11-01', '09:00'),
-    court: 'Center Court',
-    status: 'FINISHED',
-    scores: [{ team1: 6, team2: 4 }, { team1: 6, team2: 2 }], // Team 1 won 6-4, 6-2
-    winnerId: 't1',
-    round: 'Group Stage'
-  }
 */
-
-// Helper to set dates (Year-Month-Day, Hour:Minute)
-const setTime = (dateStr: string, timeStr: string) => {
-  return new Date(`${dateStr}T${timeStr}:00`).toISOString();
-};
-
-export const MATCHES: Match[] = [
+window.MATCHES = [
   {
     id: 'm1',
     team1Id: 't1',
@@ -99,7 +84,7 @@ export const MATCHES: Match[] = [
     startTime: setTime('2024-11-01', '10:00'),
     court: 'Court 2',
     status: 'LIVE', 
-    scores: [{ team1: 4, team2: 6 }, { team1: 2, team2: 1 }], // Set 2 in progress
+    scores: [{ team1: 4, team2: 6 }, { team1: 2, team2: 1 }],
     round: 'Group Stage'
   },
   {
