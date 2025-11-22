@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 // --- TYPES ---------------------------------------------------------------- //
@@ -38,7 +38,7 @@ interface Match {
 
 type TabView = 'SCHEDULE' | 'STANDINGS';
 
-// Declare global window variables from constants.ts
+// Declare global window variables
 declare global {
   interface Window {
     TEAMS: Team[];
@@ -49,7 +49,7 @@ declare global {
 // --- COMPONENTS ----------------------------------------------------------- //
 
 // 1. NAVBAR
-const Navbar: React.FC<{ currentTab: TabView; onTabChange: (tab: TabView) => void }> = ({ currentTab, onTabChange }) => {
+const Navbar = ({ currentTab, onTabChange }: { currentTab: TabView; onTabChange: (tab: TabView) => void }) => {
   const tabs = [
     { id: 'SCHEDULE' as TabView, label: 'Matches', icon: '📅' },
     { id: 'STANDINGS' as TabView, label: 'Standings', icon: '🏆' },
@@ -92,7 +92,7 @@ const Navbar: React.FC<{ currentTab: TabView; onTabChange: (tab: TabView) => voi
 };
 
 // 2. MATCH CARD
-const MatchCard: React.FC<{ match: Match; team1: Team; team2: Team }> = ({ match, team1, team2 }) => {
+const MatchCard = ({ match, team1, team2 }: { match: Match; team1: Team; team2: Team }) => {
   if (!team1 || !team2) return null;
 
   const isLive = match.status === 'LIVE';
@@ -194,10 +194,10 @@ const MatchCard: React.FC<{ match: Match; team1: Team; team2: Team }> = ({ match
 };
 
 // 3. SCHEDULE VIEW
-const ScheduleView: React.FC<{ matches: Match[]; teams: Team[] }> = ({ matches, teams }) => {
-  const liveMatches = useMemo(() => matches.filter(m => m.status === 'LIVE'), [matches]);
-  const scheduledMatches = useMemo(() => matches.filter(m => m.status === 'SCHEDULED'), [matches]);
-  const finishedMatches = useMemo(() => matches.filter(m => m.status === 'FINISHED'), [matches]);
+const ScheduleView = ({ matches, teams }: { matches: Match[]; teams: Team[] }) => {
+  const liveMatches = React.useMemo(() => matches.filter(m => m.status === 'LIVE'), [matches]);
+  const scheduledMatches = React.useMemo(() => matches.filter(m => m.status === 'SCHEDULED'), [matches]);
+  const finishedMatches = React.useMemo(() => matches.filter(m => m.status === 'FINISHED'), [matches]);
 
   const getTeam = (id: string) => teams.find(t => t.id === id) || teams[0];
 
@@ -267,8 +267,8 @@ const ScheduleView: React.FC<{ matches: Match[]; teams: Team[] }> = ({ matches, 
 };
 
 // 4. STANDINGS VIEW
-const StandingsView: React.FC<{ teams: Team[]; matches: Match[] }> = ({ teams, matches }) => {
-  const standings = useMemo(() => {
+const StandingsView = ({ teams, matches }: { teams: Team[]; matches: Match[] }) => {
+  const standings = React.useMemo(() => {
     return teams.map(team => {
       const teamMatches = matches.filter(m => (m.team1Id === team.id || m.team2Id === team.id) && m.status === 'FINISHED');
       const wins = teamMatches.filter(m => m.winnerId === team.id).length;
@@ -340,6 +340,11 @@ const StandingsView: React.FC<{ teams: Team[]; matches: Match[] }> = ({ teams, m
             <p className="text-slate-400 text-xs">1. Head-to-Head</p>
             <p className="text-slate-400 text-xs">2. Set Difference</p>
         </div>
+         <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/50">
+            <h3 className="text-padel-accent font-bold text-sm uppercase mb-2">Format</h3>
+            <p className="text-slate-400 text-xs">Golden Point Rule Active</p>
+            <p className="text-slate-400 text-xs">Best of 3 Sets</p>
+        </div>
       </div>
     </div>
   );
@@ -347,8 +352,9 @@ const StandingsView: React.FC<{ teams: Team[]; matches: Match[] }> = ({ teams, m
 
 // --- APP & MOUNT ---------------------------------------------------------- //
 
-const App: React.FC = () => {
-  const [currentTab, setCurrentTab] = useState<TabView>('SCHEDULE');
+const App = () => {
+  const [currentTab, setCurrentTab] = React.useState<TabView>('SCHEDULE');
+  
   // Read data from window object
   const teams = window.TEAMS || [];
   const matches = window.MATCHES || [];

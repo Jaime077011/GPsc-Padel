@@ -11,6 +11,7 @@
 */
 
 // Helper to set dates (Year-Month-Day, Hour:Minute)
+// We define it as a simple function on the window or local scope
 const setTime = (dateStr, timeStr) => {
   return new Date(`${dateStr}T${timeStr}:00`).toISOString();
 };
