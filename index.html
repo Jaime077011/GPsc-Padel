@@ -344,7 +344,7 @@
                     const wins = teamMatches.filter(m => m.winnerId === team.id).length;
                     const losses = teamMatches.length - wins;
                     // 3 pts for Win, 1 pt for playing but losing
-                    const points = (wins * 3) + (losses * 1);
+                    const points = (wins * 3) + (losses * 0);
                     return { ...team, played: teamMatches.length, wins, losses, points };
                 }).sort((a, b) => b.points - a.points);
 
