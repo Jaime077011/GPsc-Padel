@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     
+    <!-- Confetti Library for the Intro -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
     <script>
       tailwind.config = {
         theme: {
@@ -25,6 +28,9 @@
                 accent: '#bef264', // Lime green
                 court: '#3b82f6',
               }
+            },
+            animation: {
+                'bounce-slow': 'bounce 3s infinite',
             }
           }
         }
@@ -40,12 +46,86 @@
         .animate-fade-in {
             animation: fadeIn 0.5s ease-out forwards;
         }
+        
+        @keyframes scaleUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .animate-scale-up {
+            animation: scaleUp 0.5s ease-out forwards;
+        }
+        
+        .podium-card {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-white antialiased selection:bg-padel-accent selection:text-padel-dark flex flex-col min-h-screen">
 
+    <!-- INTRO / PODIUM OVERLAY -->
+    <div id="intro-overlay" class="fixed inset-0 z-[100] bg-slate-950/95 flex items-center justify-center hidden opacity-0 transition-opacity duration-700">
+        <div class="max-w-4xl w-full mx-4 relative">
+            <button onclick="closeIntro()" class="absolute -top-12 right-0 text-slate-400 hover:text-white transition-colors">
+                ✕ Close
+            </button>
+            
+            <div class="text-center mb-10 animate-fade-in">
+                <h1 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-600 mb-2 uppercase tracking-widest">
+                    Tournament Winners
+                </h1>
+                <p class="text-slate-400">The champions of Ragab Padel Tournament 2025</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end justify-center h-auto md:h-96">
+                <!-- 2nd Place (Silver) -->
+                <div id="winner-silver" class="order-2 md:order-1 flex flex-col items-center animate-scale-up" style="animation-delay: 0.2s">
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-slate-300 bg-slate-800 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(203,213,225,0.3)]">
+                        <span class="text-2xl md:text-4xl font-bold text-slate-300">2</span>
+                    </div>
+                    <div class="bg-slate-800/80 p-6 rounded-xl border border-slate-600 w-full text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-slate-300"></div>
+                        <h3 class="text-xl font-bold text-white mb-1 team-name">Team Name</h3>
+                        <p class="text-sm text-slate-400">Silver Medalist</p>
+                    </div>
+                </div>
+
+                <!-- 1st Place (Gold) -->
+                <div id="winner-gold" class="order-1 md:order-2 flex flex-col items-center animate-scale-up z-10 -mt-10 md:-mt-0" style="animation-delay: 0.5s">
+                    <div class="text-5xl mb-2 animate-bounce-slow">👑</div>
+                    <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-yellow-400 bg-gradient-to-b from-yellow-500/20 to-slate-900 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(250,204,21,0.5)] relative">
+                        <span class="text-4xl md:text-5xl font-bold text-yellow-400">1</span>
+                    </div>
+                    <div class="bg-gradient-to-b from-slate-800 to-slate-900 p-8 rounded-xl border border-yellow-500/50 w-full text-center relative overflow-hidden transform md:-translate-y-4 shadow-2xl">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-yellow-400"></div>
+                        <h3 class="text-2xl font-bold text-white mb-1 team-name">Team Name</h3>
+                        <p class="text-sm text-yellow-400 font-bold tracking-wider">CHAMPION</p>
+                    </div>
+                </div>
+
+                <!-- 3rd Place (Bronze) -->
+                <div id="winner-bronze" class="order-3 flex flex-col items-center animate-scale-up" style="animation-delay: 0.3s">
+                    <div class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-amber-600 bg-slate-800 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(217,119,6,0.3)]">
+                        <span class="text-2xl md:text-4xl font-bold text-amber-600">3</span>
+                    </div>
+                    <div class="bg-slate-800/80 p-6 rounded-xl border border-amber-800/50 w-full text-center relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-amber-600"></div>
+                        <h3 class="text-xl font-bold text-white mb-1 team-name">Team Name</h3>
+                        <p class="text-sm text-amber-600/80">Bronze Medalist</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <button onclick="closeIntro()" class="px-8 py-3 bg-padel-accent text-slate-900 font-bold rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-padel-accent/20">
+                    Explore Schedule
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 2. NAVBAR -->
-    <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
+    <nav class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
         <div class="max-w-5xl mx-auto px-4">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
@@ -65,6 +145,10 @@
                     </button>
                     <button onclick="switchTab('STANDINGS')" id="btn-standings" class="px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/50">
                         <span>🏆</span> Standings
+                    </button>
+                    <!-- Hidden button for Podium, shows if finalized -->
+                    <button onclick="showIntro()" id="btn-podium" class="hidden px-3 py-2 rounded-md text-sm font-medium text-yellow-400 hover:bg-yellow-400/10 border border-yellow-400/20">
+                        🥇 Winners
                     </button>
                 </div>
             </div>
@@ -174,19 +258,24 @@
             { id: 'm33', t1: 'c4', t2: 'c5', time: '2025-11-26T18:20:00', round: 'Group C', status: 'FINISHED', scores: [{t1: 2, t2: 0}], winnerId: 'c4' },
             { id: 'm34', t1: 'c1', t2: 'c4', time: '2025-11-26T18:40:00', round: 'Group C', status: 'FINISHED', scores: [{t1: 2, t2: 0}], winnerId: 'c1' },
             { id: 'm35', t1: 'a2', t2: 'a3', time: '2025-11-26T17:00:00', round: 'Group A', status: 'FINISHED', scores: [{t1: 2, t2: 0}], winnerId: 'a2' },
-           // --- QUARTER FINALS ---
+           
+            // --- QUARTER FINALS ---
              { id: 'qf1', t1: 'a2', t2: 'b3', time: '2025-12-02T17:00:00', round: 'Quarter Final 1', status: 'FINISHED', scores: [{t1: 3, t2: 0}], winnerId: 'a2' },
              { id: 'qf2', t1: 'b5', t2: 'a5', time: '2025-12-02T17:00:00', round: 'Quarter Final 2', status: 'FINISHED', scores: [{t1: 3, t2: 2}], winnerId: 'b5' },
              { id: 'qf3', t1: 'c1', t2: 'd4', time: '2025-12-02T17:30:00', round: 'Quarter Final 3', status: 'FINISHED', scores: [{t1: 2, t2: 3}], winnerId: 'd4' },
              { id: 'qf4', t1: 'd1', t2: 'c4', time: '2025-12-02T17:30:00', round: 'Quarter Final 4', status: 'FINISHED', scores: [{t1: 3, t2: 0}], winnerId: 'd1' },
 
             // --- SEMI FINALS ---
-             { id: 'sf1', t1: 'b5', t2: 'a2', time: '2025-12-02T18:00:00', round: 'Semi Final 1', status: 'LIVE', scores: [{t1: 1, t2: 3}], winnerId: 'a2' },
-             { id: 'sf2', t1: 'd1', t2: 'd4', time: '2025-12-02T18:00:00', round: 'Semi Final 2', status: 'LIVE', scores: [{t1: 3, t2: 0}], winnerId: 'd1' },
+             { id: 'sf1', t1: 'b5', t2: 'a2', time: '2025-12-02T18:00:00', round: 'Semi Final 1', status: 'FINISHED', scores: [{t1: 1, t2: 3}], winnerId: 'a2' },
+             { id: 'sf2', t1: 'd1', t2: 'd4', time: '2025-12-02T18:00:00', round: 'Semi Final 2', status: 'FINISHED', scores: [{t1: 3, t2: 0}], winnerId: 'd1' },
+
+            // --- 3rd & 4th PLACE MATCH (NEW) ---
+            // Loser SF1 (b5) vs Loser SF2 (d4)
+             { id: 'm_3rd', t1: 'b5', t2: 'd4', time: '2025-12-02T18:15:00', round: '3rd Place Match', status: 'FINISHED', scores: [{t1: 4, t2: 3}], winnerId: 'b5' },
 
             // --- FINAL ---
-             { id: 'final', t1: 'd1', t2: 'a2', time: '2025-12-02T18:30:00', round: 'Grand Final', status: 'SCHEDULED', scores: [], winnerId: null },
-        
+            // Winner SF1 (a2) vs Winner SF2 (d1)
+             { id: 'final', t1: 'd1', t2: 'a2', time: '2025-12-02T18:30:00', round: 'Grand Final', status: 'FINISHED', scores: [{t1: 4, t2: 0}], winnerId: 'd1' },
         ];
 
         // ==========================================
@@ -218,6 +307,10 @@
             const isFinished = match.status === 'FINISHED';
             const t1Won = match.winnerId === t1.id;
             const t2Won = match.winnerId === t2.id;
+            
+            // Special styling for finals
+            const isFinal = match.id === 'final';
+            const borderClass = isFinal ? 'border-yellow-500/50 shadow-[0_0_15px_rgba(234,179,8,0.1)]' : 'border-slate-700/50';
 
             // Generate Scores HTML
             let scoresHtml1 = '';
@@ -233,10 +326,10 @@
             }
 
             return `
-                <div class="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden hover:border-padel-accent/50 transition-colors duration-300 mb-4">
+                <div class="bg-slate-800/50 rounded-xl ${borderClass} border overflow-hidden hover:border-padel-accent/50 transition-colors duration-300 mb-4">
                     <div class="bg-slate-800/80 px-4 py-2 flex justify-between items-center text-xs text-slate-400 border-b border-slate-700/50">
                         <div class="flex items-center gap-2">
-                            <span class="font-semibold text-padel-accent/80">${match.round}</span>
+                            <span class="font-semibold ${isFinal ? 'text-yellow-400' : 'text-padel-accent/80'}">${match.round}</span>
                             <span>•</span>
                             
                         </div>
@@ -318,10 +411,14 @@
 
             // Finished Section
             if (finished.length > 0) {
+                // Separate finals/3rd place for highlight? Optionally, just put them first.
+                // We'll just sort by time reversed so recent matches (finals) appear first
+                finished.sort((a,b) => new Date(b.time) - new Date(a.time));
+                
                 html += `
                     <section>
                         <h2 class="text-xl font-bold text-slate-400 mb-4 uppercase tracking-wider">Completed</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 opacity-80 hover:opacity-100 transition-opacity">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 opacity-90 transition-opacity">
                             ${finished.map(m => generateMatchCard(m)).join('')}
                         </div>
                     </section>
@@ -433,7 +530,6 @@
             const activeClass = "bg-slate-800 text-padel-accent shadow-sm ring-1 ring-slate-700";
             const inactiveClass = "text-slate-400 hover:text-white hover:bg-slate-800/50";
             
-            // Remove all classes first (simplification)
             btnSched.className = `px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${tabName === 'SCHEDULE' ? activeClass : inactiveClass}`;
             btnStand.className = `px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${tabName === 'STANDINGS' ? activeClass : inactiveClass}`;
 
@@ -443,9 +539,99 @@
                 renderStandings();
             }
         }
+        
+        // --- Intro / Podium Logic ---
+        
+        function getPodiumData() {
+            const final = MATCHES.find(m => m.id === 'final');
+            const third = MATCHES.find(m => m.id === 'm_3rd');
+            
+            if (final && final.status === 'FINISHED' && third && third.status === 'FINISHED') {
+                // Winner of Final is 1st
+                const goldId = final.winnerId;
+                // Loser of Final is 2nd
+                const silverId = final.t1 === goldId ? final.t2 : final.t1;
+                // Winner of 3rd Place is 3rd
+                const bronzeId = third.winnerId;
+                
+                return {
+                    gold: getTeam(goldId),
+                    silver: getTeam(silverId),
+                    bronze: getTeam(bronzeId)
+                };
+            }
+            return null;
+        }
+
+        function showIntro() {
+            const podium = getPodiumData();
+            if (!podium) return;
+
+            const overlay = document.getElementById('intro-overlay');
+            
+            // Populate Data
+            document.querySelector('#winner-gold .team-name').textContent = podium.gold.name;
+            document.querySelector('#winner-silver .team-name').textContent = podium.silver.name;
+            document.querySelector('#winner-bronze .team-name').textContent = podium.bronze.name;
+            
+            // Show Overlay
+            overlay.classList.remove('hidden');
+            // Trigger Fade In
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+            }, 10);
+            
+            // Trigger Confetti
+            setTimeout(() => {
+                triggerConfetti();
+            }, 500);
+        }
+
+        function closeIntro() {
+            const overlay = document.getElementById('intro-overlay');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 700);
+        }
+        
+        function triggerConfetti() {
+            const duration = 3000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#bef264', '#fbbf24', '#ffffff']
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#bef264', '#fbbf24', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
 
         // --- INITIALIZE ---
         switchTab('SCHEDULE');
+        
+        // Check if podium is ready and update UI
+        const podiumData = getPodiumData();
+        if (podiumData) {
+            document.getElementById('btn-podium').classList.remove('hidden');
+            // Auto show intro on load if it's the first time? (Optional)
+            // For now, let's just show it automatically to demonstrate the feature
+            setTimeout(showIntro, 500); 
+        }
 
     </script>
 </body>
